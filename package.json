@@ -1,0 +1,22 @@
+{
+  "name": "routes",
+  "version": "0.1.0",
+  "main": "./lib/main",
+  "description": "A route parser for quick route viewing.",
+  "license": "MIT",
+  "activationCommands": {
+    "atom-workspace": [
+      "routes:toggle"
+    ]
+  },
+  "repository": "",
+  "dependencies": {
+    "atom-space-pen-views": "^2.0.0"
+  },
+  "engines": {
+    "atom": "*"
+  },
+  "devDependencies": {
+    "coffeelint": "^1.9.7"
+  }
+}

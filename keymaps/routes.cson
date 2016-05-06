@@ -1,0 +1,15 @@
+'.platform-darwin, .platform-win32, .platform-linux':
+  'ctrl-r': 'routes:toggle'
+
+'.routes atom-text-editor[mini]':
+  'enter': 'core:confirm',
+  'escape': 'core:cancel'
+
+'.platform-darwin .routes atom-text-editor[mini]':
+  'cmd-w': 'core:cancel'
+
+'.platform-win32 .routes atom-text-editor[mini]':
+  'ctrl-w': 'core:cancel'
+
+'.platform-linux .routes atom-text-editor[mini]':
+  'ctrl-w': 'core:cancel'

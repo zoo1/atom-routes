@@ -1,0 +1,7 @@
+'menu': [
+  'label': 'Edit'
+  'submenu': [
+    'label': 'Routes'
+    'command': 'routes:toggle'
+  ]
+]
