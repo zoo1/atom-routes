@@ -16,6 +16,7 @@ algorithms =
         if fuseaction.match(/&/)
           fuseaction = fuseaction.split("&")[0]
       [circuit, innercircuit] = fuseaction.split('.')
+      return unless circuit? and innercircuit?
       data =
         circuit:	circuit
         innercircuit:	innercircuit
@@ -23,6 +24,8 @@ algorithms =
         if input.indexOf(pair[0]) > -1
           data.route = pair[1]
           return data
+      data.route = routes[routes.length - 1][1]
+      return data
     findFile: (data) ->
       file = data.route
       pre = file.slice(0, 1+file.lastIndexOf("/", file.lastIndexOf("/")-1))
@@ -33,6 +36,7 @@ algorithms =
         if string.split("=")[0].toLowerCase() is data.circuit.toLowerCase()
           data.file = (pre + string.split("=")[1].replace(/"/g, '') + '/fbx_switch.cfm')
           return data
+      return
     findLine: (data) ->
       read = fs.readFileSync data.file, "utf8"
       searchregex = new RegExp('\<cfcase value=".*' + data.innercircuit + '.*">', 'i')

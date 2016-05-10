@@ -41,14 +41,26 @@ class RoutesView extends View
     return unless input.length and originFiles.length
 
     data = parser.parseInput input, originFiles
-    return unless data.circuit? and data.innercircuit?
+    if not data?
+      @error "There was an error parsing your input."
+      return
     data = parser.findFile data
+    if not data?
+      @error "There was an error finding your file."
+      return
     data = parser.findLine data
+    if not data?
+      @error "There was an error finding the correct line number."
+      return
 
     atom.workspace.open(data.file)
     .then (editor) ->
       editor.scrollToBufferPosition(data.point, center: true)
       editor.setCursorBufferPosition(data.point)
+
+  error: (message) ->
+    atom.notifications.addError message,
+      dismissable: true
 
   storeFocusedElement: ->
     @previouslyFocusedElement = $(':focus')
