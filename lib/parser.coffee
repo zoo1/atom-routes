@@ -1,6 +1,6 @@
 fs = require 'fs'
 {Point} = require 'atom'
-parseInput = findFile = findLine = {}
+[parseInput, findFile, findLine] = []
 
 updateAlgorithms = (newAlgorithm) ->
   parseInput = algorithms[newAlgorithm].parseInput
