@@ -16,7 +16,7 @@ describe 'Routes', ->
       editor.setCursorBufferPosition([1, 0])
 
 
-  describe "when go-to-line:toggle is triggered", ->
+  describe "when routes:toggle is triggered", ->
     it "adds a modal panel", ->
       expect(atom.workspace.getModalPanels()[0].isVisible()).toBeFalsy()
       atom.commands.dispatch 'atom-workspace', 'routes:toggle'
