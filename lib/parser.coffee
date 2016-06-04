@@ -16,7 +16,7 @@ algorithms =
         if fuseaction.match(/&/)
           fuseaction = fuseaction.split("&")[0]
       [circuit, innercircuit] = fuseaction.split('.')
-      return unless circuit? and innercircuit?
+      return unless circuit? and innercircuit? and routes?
       data =
         circuit:	circuit
         innercircuit:	innercircuit
