@@ -39,9 +39,17 @@ algorithms =
       return
     findLine: (data) ->
       read = fs.readFileSync data.file, "utf8"
-      searchregex = new RegExp('\<cfcase value=".*' + data.innercircuit + '.*">', 'i')
-      if searchregex.exec(read) isnt null
-        indexedRead = read.slice(0, searchregex.exec(read).index)
+      searchregex = new RegExp('\<cfcase value="(.*' + data.innercircuit + '.*)">', 'ig')
+      result = searchregex.exec read
+      index = null
+      length = 400
+      while result isnt null
+        if result[1].length < length
+          length = result[1].length
+          index = result.index
+        result = searchregex.exec read
+      if index isnt null
+        indexedRead = read.slice(0, index)
         row = indexedRead.split(/\r\n|\r|\n/).length - 1
         column = indexedRead.length - indexedRead.lastIndexOf("\n") - 1
         data.point = new Point(row, column)
