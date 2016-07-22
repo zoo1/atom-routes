@@ -28,28 +28,20 @@ algorithms =
       return data
     findFile: (data) ->
       file = data.route
-      pre = file.slice(0, 1+file.lastIndexOf("/", file.lastIndexOf("/")-1))
+      path = file.slice(0, 1+file.lastIndexOf("/", file.lastIndexOf("/")-1))
       read = fs.readFileSync file, "utf8"
-      result = read.match(/<cfset .+\/>/g)
-      for match in result
-        string = match.split("fusebox.circuits.")[1].replace(/\s/g, '')[0...-2]
-        if string.split("=")[0].toLowerCase() is data.circuit.toLowerCase()
-          data.file = (pre + string.split("=")[1].replace(/"/g, '') + '/fbx_switch.cfm')
-          return data
+      searchregex = new RegExp('fusebox.circuits.' + data.circuit + ' = "(.*)"', 'i')
+      result = searchregex.exec read
+      if result isnt null
+        data.file = (path + result[1] + '/fbx_switch.cfm')
+        return data
       return
     findLine: (data) ->
       read = fs.readFileSync data.file, "utf8"
-      searchregex = new RegExp('\<cfcase value="(.*' + data.innercircuit + '.*)">', 'ig')
+      searchregex = new RegExp('\<cfcase value=".*\\b' + data.innercircuit + '\\b.*">', 'i')
       result = searchregex.exec read
-      index = null
-      length = 400
-      while result isnt null
-        if result[1].length < length
-          length = result[1].length
-          index = result.index
-        result = searchregex.exec read
-      if index isnt null
-        indexedRead = read.slice(0, index)
+      if result isnt null
+        indexedRead = read.slice(0, result.index)
         row = indexedRead.split(/\r\n|\r|\n/).length - 1
         column = indexedRead.length - indexedRead.lastIndexOf("\n") - 1
         data.point = new Point(row, column)
