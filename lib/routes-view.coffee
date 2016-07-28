@@ -78,6 +78,3 @@ class RoutesView extends View
     @panel.show()
     @message.text("Enter the route you want to go to")
     @miniEditor.focus()
-
-blah
-asdlkfj
