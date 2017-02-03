@@ -18,42 +18,42 @@ algorithms =
       [circuit, innercircuit] = fuseaction.split('.')
       return unless circuit? and innercircuit? and routes?
       data =
-        circuit:	circuit
-        innercircuit:	innercircuit
+        circuit: circuit
+        innercircuit: innercircuit
       for pair in routes
         if input.indexOf(pair[0]) > -1
           data.route = pair[1]
           return data
       data.route = routes[routes.length - 1][1]
-      return data
-    findFile: (data) ->
-      file = data.route
-      path = file.slice(0, 1+file.lastIndexOf("/", file.lastIndexOf("/")-1))
-      read = fs.readFileSync file, "utf8"
-      searchregex = new RegExp('fusebox.circuits.' + data.circuit + ' = "(.*)"', 'i')
+      data
+    findFile: ({route, circuit, innercircuit}) ->
+      path = route.slice(0, 1+route.lastIndexOf("/", route.lastIndexOf("/")-1))
+      read = fs.readFileSync route, "utf8"
+      searchregex = new RegExp('fusebox.circuits.' + circuit + ' = "(.*)"', 'i')
       result = searchregex.exec read
       if result isnt null
-        data.file = (path + result[1] + '/fbx_switch.cfm')
-        return data
+        file = (path + result[1] + '/fbx_switch.cfm')
+        return {file, innercircuit}
       return
-    findLine: (data) ->
-      read = fs.readFileSync data.file, "utf8"
-      searchregex = new RegExp('\<cfcase value=".*\\b' + data.innercircuit + '\\b.*">', 'i')
+    findLine: ({file, innercircuit}) ->
+      read = fs.readFileSync file, "utf8"
+      searchregex = new RegExp('\<cfcase value=".*\\b' + innercircuit + '\\b.*">', 'i')
       result = searchregex.exec read
       if result isnt null
         indexedRead = read.slice(0, result.index)
         row = indexedRead.split(/\r\n|\r|\n/).length - 1
         column = indexedRead.length - indexedRead.lastIndexOf("\n") - 1
-        data.point = new Point(row, column)
-        return data
-      if read.indexOf('<cfdefaultcase>') > -1
+        point = new Point(row, column)
+        {file, point}
+      else if read.indexOf('<cfdefaultcase>') > -1
         indexedRead = read.slice(0, read.lastIndexOf('<cfdefaultcase>'))
         row = indexedRead.split(/\r\n|\r|\n/).length - 1
         column = indexedRead.length - indexedRead.lastIndexOf("\n") - 1
-        data.point = new Point(row, column)
-        return data
-      data.point = new Point(0, 0)
-      return data
+        point = new Point(row, column)
+        {file, point}
+      else
+        point = new Point(0, 0)
+        {file, point}
 
 updateAlgorithms(atom.config.get('routes.parsingAlgorithm'))
 atom.config.observe 'routes.parsingAlgorithm', (newValue) ->
