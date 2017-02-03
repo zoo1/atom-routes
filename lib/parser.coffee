@@ -10,4 +10,4 @@ updateAlgo(atom.config.get('routes.parsingAlgorithm'))
 atom.config.observe 'routes.parsingAlgorithm', (value) ->
   updateAlgo(value)
 
-module.exports = {parse}
+module.exports = parse

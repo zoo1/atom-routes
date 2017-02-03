@@ -40,7 +40,7 @@ class RoutesView extends View
     # need to add checks for the existance of input and routes
     return unless input.length and originFiles.length
 
-    {error, file, point} = parser.parse input, originFiles
+    {error, file, point} = parser input, originFiles
     if error?
       @error error
       return

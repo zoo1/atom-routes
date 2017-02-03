@@ -1,5 +1,4 @@
 module.exports =
-  # Your config schema
   config:
     parsingAlgorithm:
       type: 'string'
