@@ -40,23 +40,15 @@ class RoutesView extends View
     # need to add checks for the existance of input and routes
     return unless input.length and originFiles.length
 
-    data = parser.parseInput input, originFiles
-    if not data?
-      @error "There was an error parsing your input."
-      return
-    data = parser.findFile data
-    if not data?
-      @error "There was an error finding your file."
-      return
-    data = parser.findLine data
-    if not data?
-      @error "There was an error finding the correct line number."
+    {error, file, point} = parser.parse input, originFiles
+    if error?
+      @error error
       return
 
-    atom.workspace.open(data.file)
+    atom.workspace.open(file)
     .then (editor) ->
-      editor.scrollToBufferPosition(data.point, center: true)
-      editor.setCursorBufferPosition(data.point)
+      editor.scrollToBufferPosition(point, center: true)
+      editor.setCursorBufferPosition(point)
 
   error: (message) ->
     atom.notifications.addError message,
