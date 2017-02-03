@@ -1,4 +1,5 @@
 fs = require 'fs'
+path = require 'path'
 {Point} = require 'atom'
 
 parse = (input, routes) ->
@@ -21,12 +22,12 @@ parse = (input, routes) ->
   findFile data
 
 findFile = ({route, circuit, innercircuit}) ->
-  path = route.slice(0, 1+route.lastIndexOf("/", route.lastIndexOf("/")-1))
+  dir = path.dirname(route)
   read = fs.readFileSync route, "utf8"
   searchregex = new RegExp("fusebox.circuits.#{circuit} = \"(.*)\"", 'i')
   result = searchregex.exec read
   if result isnt null
-    file = (path + result[1] + '/fbx_switch.cfm')
+    file = (dir + result[1] + '/fbx_switch.cfm')
     return findLine {file, innercircuit}
   {error: "There was an error finding your file."}
 
