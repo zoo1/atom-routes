@@ -1,6 +1,6 @@
 {
   "name": "routes",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "./lib/main",
   "description": "A route parser for quick route viewing.",
   "license": "MIT",
